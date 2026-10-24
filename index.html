@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿坑启动器 v2 · Emerald Night — 免费 Minecraft 启动器</title>
+<style>
+  :root{
+    --bg:#0b0f14; --bg2:#0d131a; --card:rgba(255,255,255,.045); --card2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.09); --acc:#34d877; --acc2:#6ef2a8; --deep:#2fb56b;
+    --tx:#e8f3ec; --tx2:#93a89e; --tx3:#5f7268;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Segoe UI","Microsoft YaHei UI","Microsoft YaHei",sans-serif;
+    background:
+      radial-gradient(1100px 560px at 85% -10%, rgba(52,216,119,.14), transparent 62%),
+      radial-gradient(900px 500px at -10% 30%, rgba(52,216,119,.07), transparent 58%),
+      radial-gradient(800px 600px at 55% 115%, rgba(52,216,119,.08), transparent 60%),
+      var(--bg);
+    color:var(--tx); overflow-x:hidden;
+  }
+  ::selection{background:rgba(52,216,119,.35)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* ---------- 顶栏 ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(14px);
+    background:rgba(11,15,20,.72);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:26px;height:62px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
+  .logo svg{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(52,216,119,.6))}
+  .logo b{color:var(--acc)}
+  .navlinks{display:flex;gap:24px;font-size:13.5px;color:var(--tx2);margin-left:12px}
+  .navlinks a{transition:.2s}
+  .navlinks a:hover{color:var(--acc2)}
+  .navdl{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .btnmini{padding:9px 20px;border-radius:11px;font-size:13px;font-weight:700;color:#06130b;
+    background:linear-gradient(120deg,#4be98d,#2fb56b);box-shadow:0 6px 18px rgba(52,216,119,.3);
+    transition:.22s cubic-bezier(.22,1,.36,1)}
+  .btnmini:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 10px 26px rgba(52,216,119,.42)}
+
+  /* ---------- Hero ---------- */
+  #hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+  #px{position:absolute;inset:0;opacity:.55}
+  #hero .wrap{position:relative;z-index:2;padding-top:110px;padding-bottom:80px}
+  .badge{display:inline-flex;align-items:center;gap:9px;padding:8px 18px;border-radius:999px;
+    border:1px solid rgba(52,216,119,.35);background:rgba(52,216,119,.08);
+    font-size:12.5px;letter-spacing:1.5px;color:var(--acc2)}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);
+    box-shadow:0 0 10px var(--acc);animation:blink 2.4s ease-in-out infinite}
+  @keyframes blink{50%{opacity:.4}}
+  h1{font-size:clamp(46px,7.2vw,84px);font-weight:900;letter-spacing:2px;line-height:1.12;margin-top:26px;
+    background:linear-gradient(105deg,#f2fff8 10%,#7bf5b2 45%,#2fb56b 90%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero-sub{margin-top:18px;font-size:clamp(15px,1.7vw,18px);color:var(--tx2);line-height:2;max-width:640px}
+  .hero-sub b{color:var(--tx)}
+  .cta{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:11px;border:0;cursor:pointer;border-radius:15px;
+    font-size:16.5px;font-weight:800;letter-spacing:1px;color:#06130b;padding:17px 44px;
+    background:linear-gradient(120deg,#4be98d,#2fb56b);
+    box-shadow:0 14px 40px rgba(52,216,119,.35),inset 0 1px 0 rgba(255,255,255,.4);
+    transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,filter .25s}
+  .btn:hover{transform:translateY(-3px);filter:brightness(1.07);box-shadow:0 20px 52px rgba(52,216,119,.45)}
+  .btn:active{transform:translateY(-1px) scale(.99)}
+  .btn.ghost{background:var(--card);color:var(--tx);border:1px solid var(--line);box-shadow:none;
+    font-weight:600;font-size:14.5px;padding:16px 30px}
+  .btn.ghost:hover{border-color:rgba(52,216,119,.5);color:var(--acc2)}
+  .dlmeta{margin-top:18px;font-size:12.5px;color:var(--tx3);letter-spacing:.8px;display:flex;gap:18px;flex-wrap:wrap}
+  .dlmeta span b{color:var(--acc2)}
+  .heroShot{margin-top:58px;border-radius:20px;overflow:hidden;border:1px solid var(--line);
+    box-shadow:0 40px 110px rgba(0,0,0,.55),0 0 0 1px rgba(52,216,119,.12),0 0 90px rgba(52,216,119,.10);
+    transform:perspective(1400px) rotateX(2.5deg);transition:transform .6s cubic-bezier(.22,1,.36,1)}
+  .heroShot:hover{transform:perspective(1400px) rotateX(0)}
+  .heroShot img{display:block;width:100%}
+
+  /* ---------- 区块通用 ---------- */
+  section{padding:96px 0}
+  .secHead{text-align:center;margin-bottom:52px}
+  .secHead .k{font-size:12px;letter-spacing:4px;color:var(--acc);font-weight:700}
+  .secHead h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:1px;margin-top:12px}
+  .secHead p{margin-top:12px;color:var(--tx2);font-size:14.5px}
+
+  /* ---------- 特性 ---------- */
+  .feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .feat{border:1px solid var(--line);border-radius:20px;background:var(--card);backdrop-filter:blur(10px);
+    padding:30px 28px;transition:.3s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+  .feat::before{content:"";position:absolute;inset:0;opacity:0;transition:.35s;
+    background:radial-gradient(420px 180px at 20% 0%, rgba(52,216,119,.12), transparent 60%)}
+  .feat:hover{transform:translateY(-6px);border-color:rgba(52,216,119,.4);box-shadow:0 24px 60px rgba(0,0,0,.4)}
+  .feat:hover::before{opacity:1}
+  .feat .ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+    font-size:25px;background:rgba(52,216,119,.12);border:1px solid rgba(52,216,119,.28);margin-bottom:20px}
+  .feat h3{font-size:16.5px;font-weight:700;letter-spacing:.5px}
+  .feat p{margin-top:10px;font-size:13.5px;color:var(--tx2);line-height:1.95}
+
+  /* ---------- 预览 ---------- */
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}
+  .shot{border-radius:18px;overflow:hidden;border:1px solid var(--line);cursor:zoom-in;position:relative;
+    transition:.35s cubic-bezier(.22,1,.36,1);background:var(--bg2)}
+  .shot:hover{transform:translateY(-6px) scale(1.012);border-color:rgba(52,216,119,.45);
+    box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 50px rgba(52,216,119,.12)}
+  .shot img{display:block;width:100%}
+  .shot .tag{position:absolute;left:14px;bottom:14px;padding:7px 16px;border-radius:999px;font-size:12px;
+    background:rgba(11,15,20,.75);backdrop-filter:blur(8px);border:1px solid var(--line);letter-spacing:1px}
+  #lb{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
+    background:rgba(5,8,11,.88);backdrop-filter:blur(10px);cursor:zoom-out;padding:4vh 4vw}
+  #lb.on{display:flex;animation:pin .3s ease}
+  #lb img{max-width:100%;max-height:100%;border-radius:14px;border:1px solid var(--line);
+    box-shadow:0 40px 120px rgba(0,0,0,.7)}
+  @keyframes pin{from{opacity:0}to{opacity:1}}
+
+  /* ---------- 下载 ---------- */
+  #dl .box{border:1px solid rgba(52,216,119,.35);border-radius:26px;padding:56px 48px;text-align:center;
+    background:linear-gradient(160deg,rgba(52,216,119,.10),rgba(52,216,119,.03) 55%,transparent),var(--card);
+    backdrop-filter:blur(12px);box-shadow:0 30px 90px rgba(0,0,0,.4),0 0 80px rgba(52,216,119,.08)}
+  #dl h2{font-size:clamp(26px,3.6vw,36px);font-weight:800}
+  #dl .ds{margin-top:14px;color:var(--tx2);font-size:14.5px}
+  .steps{display:flex;gap:16px;margin:42px 0;justify-content:center;flex-wrap:wrap}
+  .step{flex:1;min-width:200px;max-width:260px;border:1px solid var(--line);border-radius:16px;
+    padding:22px 20px;background:rgba(0,0,0,.22);text-align:left}
+  .step .n{width:30px;height:30px;border-radius:9px;background:rgba(52,216,119,.15);
+    border:1px solid rgba(52,216,119,.3);color:var(--acc2);font-weight:800;font-size:14px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .step h4{font-size:14.5px}
+  .step p{margin-top:8px;font-size:12.5px;color:var(--tx2);line-height:1.8}
+  #dl .sys{margin-top:20px;font-size:12px;color:var(--tx3);letter-spacing:1px}
+
+  /* ---------- 页脚 ---------- */
+  footer{border-top:1px solid var(--line);padding:34px 0 40px;text-align:center;color:var(--tx3);font-size:12.5px;letter-spacing:1px}
+  footer .lg{display:flex;align-items:center;justify-content:center;gap:9px;color:var(--tx2);margin-bottom:14px}
+  footer .lg svg{width:20px;height:20px}
+  footer p{line-height:2.1}
+
+  /* ---------- 显现动画 ---------- */
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+  .rv.in{opacity:1;transform:none}
+
+  @media (max-width:760px){
+    .navlinks{display:none}
+    section{padding:70px 0}
+    .shots{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#hero">
+      <svg viewBox="0 0 120 120">
+        <polygon points="60,10 102,34 60,58 18,34" fill="#5cf09a"/>
+        <polygon points="18,34 60,58 60,108 18,84" fill="#2fb56b"/>
+        <polygon points="102,34 102,84 60,108 60,58" fill="#1e7f4b"/>
+      </svg>
+      阿坑启动器<b>·v2</b>
+    </a>
+    <div class="navlinks">
+      <a href="#feats">特性</a>
+      <a href="#shots">预览</a>
+      <a href="#dl">下载</a>
+    </div>
+    <div class="navdl">
+      <a class="btnmini" href="./阿坑启动器v2-安装包.exe" download>下载安装包</a>
+    </div>
+  </div>
+</nav>
+
+<header id="hero">
+  <canvas id="px"></canvas>
+  <div class="wrap">
+    <span class="badge"><span class="dot"></span>v2.0.0 · EMERALD NIGHT 正式版</span>
+    <h1>让每一次启动<br>都像开一局新世界</h1>
+    <p class="hero-sub">
+      <b>阿坑启动器 v2</b> — 免费、纯净、无广告的 Minecraft Java 版启动器。
+      翡翠夜空界面、丝滑开屏动画、微软正版登录、一键下载原版 / Fabric / Forge，装完就能玩。
+    </p>
+    <div class="cta">
+      <a class="btn" href="./阿坑启动器v2-安装包.exe" download>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M6 11l6 6 6-6"/><path d="M4 21h16"/></svg>
+        下载 Windows 安装包
+      </a>
+      <a class="btn ghost" href="#shots">先看看长什么样 ↓</a>
+    </div>
+    <div class="dlmeta">
+      <span>版本 <b>v2.0.0</b></span>
+      <span>大小 <b id="sz">约 15 MB</b></span>
+      <span>系统 <b>Windows 10 / 11</b></span>
+      <span>价格 <b>免费 · 无广告</b></span>
+    </div>
+    <div class="heroShot">
+      <img src="shots/home.png" alt="阿坑启动器 v2 主界面" loading="eager">
+    </div>
+  </div>
+</header>
+
+<section id="feats">
+  <div class="wrap">
+    <div class="secHead rv">
+      <div class="k">FEATURES</div>
+      <h2>它不止好看，还好用</h2>
+      <p>从界面到内核，每一个细节都为你打磨过</p>
+    </div>
+    <div class="feats">
+      <div class="feat rv"><div class="ic">🌌</div><h3>翡翠夜空设计语言</h3><p>深空底色 × 翡翠渐变极光斑，玻璃拟态卡片与像素粒子背景，每处细节都在发光。</p></div>
+      <div class="feat rv"><div class="ic">✨</div><h3>丝滑开屏 / 关屏动画</h3><p>Win32 逐帧渲染引擎：启动时立方体逐字点亮，关闭时窗口收缩渐隐，全程 60 帧曲线缓动。</p></div>
+      <div class="feat rv"><div class="ic">🎮</div><h3>微软正版登录</h3><p>完整 MSA 登录链（XBL → XSTS → Minecraft），refresh_token 自动续期，正版玩家头像直接显示。</p></div>
+      <div class="feat rv"><div class="ic">⬇️</div><h3>PCL 式版本下载</h3><p>官方全版本源（917+ 版本）搜索、筛选，原版 / Fabric / Forge 一键安装，缺失文件自动补全。</p></div>
+      <div class="feat rv"><div class="ic">⚡</div><h3>一键启动 · 全托管</h3><p>自动定位 Java 21 运行时、分配内存、拼接启动命令，quickPlay 直连服务器，点一下就进世界。</p></div>
+      <div class="feat rv"><div class="ic">🧩</div><h3>纯净绿色 · 不玩套路</h3><p>无广告、无捆绑、不偷偷上传。配置本地落盘，卸载即走，游戏存档永远属于你。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="shots" style="padding-top:20px">
+  <div class="wrap">
+    <div class="secHead rv">
+      <div class="k">SCREENSHOTS</div>
+      <h2>眼见为实</h2>
+      <p>点击放大 · 全部为启动器真实界面截图</p>
+    </div>
+    <div class="shots">
+      <div class="shot rv" data-full="shots/home.png"><img src="shots/home.png" alt="主页" loading="lazy"><span class="tag">🏠 主页 · 一键启动</span></div>
+      <div class="shot rv" data-full="shots/download.png"><img src="shots/download.png" alt="下载页" loading="lazy"><span class="tag">⬇️ 下载 · PCL 式界面</span></div>
+      <div class="shot rv" data-full="shots/versions.png"><img src="shots/versions.png" alt="版本库" loading="lazy"><span class="tag">🗂 版本库 · 本地管理</span></div>
+      <div class="shot rv" data-full="shots/splash.png"><img src="shots/splash.png" alt="开屏动画" loading="lazy"><span class="tag">✨ 开屏动画</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="dl">
+  <div class="wrap">
+    <div class="box rv">
+      <h2>现在，开一局新的世界</h2>
+      <p class="ds">下载安装包 → 双击 → 三步装好，无任何捆绑</p>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h4>下载安装包</h4><p>点击下方按钮，保存 <b>阿坑启动器v2-安装包.exe</b></p></div>
+        <div class="step"><div class="n">2</div><h4>双击安装</h4><p>选择安装位置（默认 F 盘），勾选快捷方式，一路下一步</p></div>
+        <div class="step"><div class="n">3</div><h4>启动开玩</h4><p>选版本 → 填玩家名（或正版登录）→ 点「启动游戏」</p></div>
+      </div>
+      <a class="btn" href="./阿坑启动器v2-安装包.exe" download>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M6 11l6 6 6-6"/><path d="M4 21h16"/></svg>
+        下载阿坑启动器 v2 <span id="sz2" style="font-weight:600;opacity:.75;font-size:13px"></span>
+      </a>
+      <div class="sys">WINDOWS 10 / 11 · 64 位 · 免安装运行库 · 卸载可在「设置 → 应用」完成</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="lg">
+      <svg viewBox="0 0 120 120">
+        <polygon points="60,10 102,34 60,58 18,34" fill="#5cf09a"/>
+        <polygon points="18,34 60,58 60,108 18,84" fill="#2fb56b"/>
+        <polygon points="102,34 102,84 60,108 60,58" fill="#1e7f4b"/>
+      </svg>
+      阿坑启动器 · AhKeng Launcher v2
+    </div>
+    <p>翡翠夜空 Emerald Night · Made by 阿坑 ❤ · 2026<br>
+    Minecraft 是 Mojang Studios 的商标，本启动器为第三方免费工具，与官方无隶属关系。</p>
+  </div>
+</footer>
+
+<div id="lb"><img id="lbImg" src="" alt="预览"></div>
+
+<script>
+  /* ---------- 像素粒子（鼠标视差） ---------- */
+  (function(){
+    const cv = document.getElementById('px'), ctx = cv.getContext('2d');
+    let W, H, ps = [], mx = 0, my = 0;
+    function rs(){
+      W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight;
+      const n = Math.min(90, Math.floor(W * H / 16000));
+      ps = [];
+      for (let i = 0; i < n; i++){
+        ps.push({ x: Math.random()*W, y: Math.random()*H,
+          s: 1.5 + Math.random()*3.5, v: .12 + Math.random()*.4,
+          a: .06 + Math.random()*.30, ph: Math.random()*6.28 });
+      }
+    }
+    rs(); addEventListener('resize', rs);
+    addEventListener('mousemove', e => { mx = e.clientX/innerWidth - .5; my = e.clientY/innerHeight - .5; });
+    (function loop(t){
+      ctx.clearRect(0,0,W,H);
+      for (const p of ps){
+        p.y -= p.v; if (p.y < -8){ p.y = H + 8; p.x = Math.random()*W; }
+        const ox = mx * p.s * 26, oy = my * p.s * 18;
+        const tw = p.a * (.65 + .35*Math.sin(t/900 + p.ph));
+        ctx.fillStyle = 'rgba(82,240,150,' + tw.toFixed(3) + ')';
+        ctx.fillRect(p.x + ox, p.y + oy, p.s, p.s);
+      }
+      requestAnimationFrame(loop);
+    })(0);
+  })();
+
+  /* ---------- 滚动显现 ---------- */
+  (function(){
+    const noanim = location.search.indexOf('noanim') >= 0;
+    if (noanim){
+      document.documentElement.style.scrollBehavior = 'auto';
+      document.getElementById('hero').style.minHeight = '0';
+      document.querySelectorAll('.rv').forEach(el => el.classList.add('in'));
+    }
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { threshold: .12 });
+    document.querySelectorAll('.rv').forEach((el, i) => {
+      if (el.classList.contains('in')) return;
+      el.style.transitionDelay = (i % 3) * 90 + 'ms';
+      io.observe(el);
+    });
+  })();
+
+  /* ---------- 灯箱 ---------- */
+  (function(){
+    const lb = document.getElementById('lb'), img = document.getElementById('lbImg');
+    document.querySelectorAll('.shot').forEach(s =>
+      s.addEventListener('click', () => { img.src = s.dataset.full; lb.classList.add('on'); }));
+    lb.addEventListener('click', () => lb.classList.remove('on'));
+    addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('on'); });
+  })();
+
+  /* ---------- 安装包实际大小 ---------- */
+  (function(){
+    const url = "./阿坑启动器v2-安装包.exe";
+    fetch(url, { method: 'HEAD' }).then(r => {
+      const len = +r.headers.get('Content-Length');
+      if (len > 1048576){
+        const mb = (len/1048576).toFixed(1);
+        document.getElementById('sz').textContent = mb + ' MB';
+        document.getElementById('sz2').textContent = '（' + mb + ' MB）';
+      }
+    }).catch(()=>{});
+  })();
+</script>
+</body>
+</html>
